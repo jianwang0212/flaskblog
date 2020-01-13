@@ -5,7 +5,7 @@
 venv/
 
 # config
-config.py
+*config.py
 
 # python
 *.pyc
