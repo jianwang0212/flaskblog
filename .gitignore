@@ -4,6 +4,9 @@
 # vevn
 venv/
 
+# config
+config.py
+
 # python
 *.pyc
 
