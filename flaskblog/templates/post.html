@@ -15,6 +15,17 @@
       </div>
       <h2 class="article-title">{{ post.title }}</h2>
       <p class="article-content">{{ post.content }}</p>
+      {% if 'youtube' in post.content %}
+        {% for item in post.content.split("\n")%}
+          {% if "youtube" in item%}
+            <!-- <p>{{item.strip().replace(" ", "")}}</p> -->
+            <iframe width="560" height="315"
+            src={{item.strip().replace(" ", "")}} frameborder="0" allow="accelerometer;
+            autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+          {%endif%}
+        {%endfor%}
+      {% endif %}
     </div>
   </article>
   <!-- Modal -->
