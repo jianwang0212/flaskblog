@@ -66,10 +66,12 @@ https://www.youtube.com/watch?v=goToXTC96Co
 7. #sudo ufw enable
 8. sudo systemctl restart nginx
 9. cd /home/yin/flaskblog && gunicorn -w 3 run:app
-cd /home/yin/flaskblog && export FLASK_APP=run.py
-nohup gunicorn -w 3 run:app
-sudo killall gunicorn
 
+### Refresh server to match local ####
+cd /home/yin/flaskblog && export FLASK_APP=run.py
+sudo git pull
+sudo killall gunicorn
+nohup gunicorn -w 3 run:app
 
 ## not in use
 10. sudo apt install supervisor
