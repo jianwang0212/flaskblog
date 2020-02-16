@@ -68,6 +68,7 @@ https://www.youtube.com/watch?v=goToXTC96Co
 9. cd /home/yin/flaskblog && gunicorn -w 3 run:app
 
 ### Refresh server to match local ####
+sudo systemctl restart nginx
 cd /home/yin/flaskblog && export FLASK_APP=run.py
 sudo git pull
 sudo killall gunicorn
