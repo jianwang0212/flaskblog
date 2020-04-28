@@ -37,9 +37,6 @@ rm /root/flaskblog/flaskblog/site.db
 2. pip3 install -r requirements.txt  && pip install --upgrade pip
 3. cd /Users/Zi/Google\ Drive/flaskblog
 
-debug mode: ## don't use virtual environment
-python run.py
-
 export FLASK_APP=run.py
 export FLASK_ENV=development
 flask run --host=0.0.0.0
@@ -47,13 +44,6 @@ flask run --host=0.0.0.0
 ################## transfer data from server ##################
 rsync -avz -e root@173.230.137.72:/root/flaskblog/flaskblog/29_dec_site.db /Users/Zi/Downloads --exclude='env' --exclude='*.py'
 
-
-#### Get a look at the db ###
-sqlite3 site.db
-select * from test;
-
-reference instruction:
-https://www.youtube.com/watch?v=goToXTC96Co
 
 
 
@@ -69,10 +59,14 @@ https://www.youtube.com/watch?v=goToXTC96Co
 9. cd /home/yin/flaskblog && gunicorn -w 3 run:app
 
 ### Refresh server to match local ####
+conda activate base
 sudo systemctl restart nginx
 cd /home/yin/flaskblog && export FLASK_APP=run.py
+flask run --host=0.0.0.0
 sudo git pull
 sudo killall gunicorn
+# gunicorn --bind 0.0.0.0:5000 run:app ## test on local port
+# gunicorn -w 3 run:app ## test on web
 nohup gunicorn -w 3 run:app
 
 ## not in use

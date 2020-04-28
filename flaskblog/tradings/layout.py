@@ -191,7 +191,7 @@ def fig1_producer(df1, df2, df3):
   fig1 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.1,
                        specs=[[{"secondary_y": True}],
                               [{"secondary_y": True}]],
-                       subplot_titles=("Market orderbook & my orders/trades (Local currency)", "My total balance & holding position (USD)"))
+                       subplot_titles=("Market orderbook & my orders/trades (Local currency)", "My holding position (left-ETH) & total balance(right-USD)"))
 
   for i in range(len(fig1_sub1_traces)):
     fig1.add_trace(fig1_sub1_traces[i],
@@ -266,7 +266,7 @@ def fig2_producer(df1, df2, df3):
 
 fig2 = fig2_producer(df1, df2, df3)
 
-## tables - data
+# tables - data
 tbl_my_trades = df3[['time', 'type', 'takerOrMaker', 'side', 'amount', 'price',
                      'fee_fiat', 'fee_pct']]
 tbl_my_orders = df2[['time', 'OpenOrder_side', 'OpenOrder_price',
@@ -281,38 +281,145 @@ columns_orders = [{"name": i, "id": i} for i in tbl_my_orders.columns]
 
 
 # plot
-layout = html.Div(children=[
-    html.H1('Trading Dashboard'),
-    dcc.Graph(id='g1',
-              figure=fig1),
-    dcc.Graph(id='g2',
-              figure=fig2),
-    html.H2('My latest trades'),
-    dash_table.DataTable(id='table_trades',
-                         columns=columns_trades,
-                         data=tbl_my_trades.to_dict('records'),
-                         style_as_list_view=True,
-                         style_cell={'padding': '5px'},
-                         style_header={
-                             'backgroundColor': 'white',
-                             'fontWeight': 'bold'
-                         }),
-    html.H2('My latest open orders'),
-    dash_table.DataTable(id='table_openorders',
-                         columns=columns_orders,
-                         data=tbl_my_orders.to_dict('records'),
-                         style_as_list_view=True,
-                         style_cell={'padding': '5px'},
-                         style_header={
-                             'backgroundColor': 'white',
-                             'fontWeight': 'bold'
-                         }),
-    dcc.Interval(
-        id='interval-component',
-        interval=50 * 1000,  # in milliseconds
-        n_intervals=0,
-        disabled=False
-    )
+layout = html.Div(
+    className="row",
+    children=[
+        # Left Panel Div
+        html.Div(
+            className="three columns div-left-panel",
+            children=[
+                # Div for Left Panel App Info
+                html.Div(
+                    className="div-info",
+                    children=[
+                        html.Img(
+                            className="logo", src='https://www.qries.com/images/banner_logo.png'
+                        ),
+                        html.H6(className="title-header",
+                                children="FOREX TRADER"),
+                        html.P(
+                            """
+                            This app continually queries csv files and updates Ask and Bid prices
+                            for major currency pairs as well as Stock Charts. You can also virtually
+                            buy and sell stocks and see the profit updates.
+                            """
+                        ),
+                    ],
+                ),
+                # Ask Bid Currency Div
+                html.Div(
+                    className="div-currency-toggles",
+                    children=[
+                        html.P(className="three-col", children="Last update"),
+                        html.P(
+                            id="live_clock",
+                            className="three-col",
+                            children=dt.datetime.now().strftime("%H:%M:%S"),
+                        ),
+                        # html.P(className="three-col", children="Ask"),
+                        # html.Div(
+                        #     id="pairs",
+                        #     className="div-bid-ask",
+                        #     children=[
+                        #         get_row(first_ask_bid(
+                        #             pair, datetime.datetime.now()))
+                        #         for pair in currencies
+                        #     ],
+                        # ),
+                    ],
+                ),
+                # Div for News Headlines
+                # html.Div(
+                #     className="div-news",
+                #     children=[html.Div(id="news", children=update_news())],
+                # ),
+            ],
+        ),
+        # Right Panel Div
+        html.Div(
+            className="nine columns div-right-panel",
+            children=[
+                # html.H1('Trading Dashboard'),
+                # Top Bar Div - Displays Balance, Equity, ... , Open P/L
+                # html.Div(
+                #       className="row div-top-bar", children=[html.H2('title')]
+                # ),
+                # Charts Div
+                html.Div(
+                    # id="charts",
+                    className="row",
+                    children=[dcc.Graph(id='g1', figure=fig1),
+                              dcc.Graph(id='g2', figure=fig2)],
 
-]
+
+                ),
+                # Panel for orders
+                # html.Div(
+                #     id="bottom_panel",
+                #     className="row div-bottom-panel",
+                #     children=[
+                #         html.Div(
+                #             className="display-inlineblock",
+                #             children=[
+                #                 dcc.Dropdown(
+                #                     id="dropdown_positions",
+                #                     className="bottom-dropdown",
+                #                     options=[
+                #                         {"label": "Open Positions", "value": "open"},
+                #                         {
+                #                             "label": "Closed Positions",
+                #                             "value": "closed",
+                #                         },
+                #                     ],
+                #                     value="open",
+                #                     clearable=False,
+                #                     style={"border": "0px solid black"},
+                #                 )
+                #             ],
+                #         ),
+                #         html.Div(
+                #             className="display-inlineblock float-right",
+                #             children=[
+                #                 dcc.Dropdown(
+                #                     id="closable_orders",
+                #                     className="bottom-dropdown",
+                #                     placeholder="Close order",
+                #                 )
+                #             ],
+                #         ),
+                #         html.Div(id="orders_table", className="row table-orders"),
+                #     ],
+                # ),
+            ],
+        ),
+
+
+        # dcc.Graph(id='g1',
+        #           figure=fig1),
+        # dcc.Graph(id='g2',
+        #           figure=fig2),
+        html.H2('My latest trades'),
+        dash_table.DataTable(id='table_trades',
+                             columns=columns_trades,
+                             data=tbl_my_trades.to_dict('records'),
+                             style_as_list_view=True,
+                             style_cell={'padding': '5px'},
+                             style_header={
+                                 'backgroundColor': 'white',
+                                 'fontWeight': 'bold'
+                             }),
+        html.H2('My latest open orders'),
+        dash_table.DataTable(id='table_openorders',
+                             columns=columns_orders,
+                             data=tbl_my_orders.to_dict('records'),
+                             style_as_list_view=True,
+                             style_cell={'padding': '5px'},
+                             style_header={
+                                 'backgroundColor': 'white',
+                                 'fontWeight': 'bold'
+                             }),
+        dcc.Interval(id='interval-component',
+                     interval=500 * 1000, n_intervals=0)
+
+    ]
 )

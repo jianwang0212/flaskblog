@@ -51,6 +51,7 @@ def register_dashapp(app, title, base_pathname, layout, register_callbacks_fun):
 
     my_dashapp = dash.Dash(__name__,
                            server=app,
+                           external_stylesheets=['/static/main.css'],
                            url_base_pathname=f'/{base_pathname}/',
                            assets_folder=get_root_path(
                                __name__) + f'/{base_pathname}/assets/',

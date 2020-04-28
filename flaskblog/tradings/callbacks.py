@@ -175,7 +175,7 @@ def fig1_producer(df1, df2, df3):
   fig1 = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.1,
                        specs=[[{"secondary_y": True}],
                               [{"secondary_y": True}]],
-                       subplot_titles=("Market orderbook & my orders/trades (Local currency)", "My total balance & holding position (USD)"))
+                       subplot_titles=("Market orderbook & my orders/trades (Local currency)", "My holding position (left-ETH) & total balance(right-USD)"))
 
   for i in range(len(fig1_sub1_traces)):
     fig1.add_trace(fig1_sub1_traces[i],
