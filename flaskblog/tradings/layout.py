@@ -34,7 +34,7 @@ layout = html.Div(
                             src='/tradings/assets/logo_dashboard.jpg'
                         ),
                         html.H6(className="title-header",
-                                children="FOREX TRADER"),
+                                children="CRYPTO MONITOR"),
                         html.P([
                             """
                             This app continually queries/update market orderbook (5 level bids/ask) every minute,
