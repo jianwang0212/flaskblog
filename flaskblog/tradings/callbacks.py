@@ -188,6 +188,7 @@ def fig1_producer(df1, df2, df3):
   fig1.add_trace(trace_bal_all,
                  row=2, col=1, secondary_y=True)
   fig1.update_layout(barmode='stack')
+  fig1.update_layout(title='Historical time series')
   return fig1
 
 
@@ -254,11 +255,13 @@ def register_callbacks(dashapp):
        Output('table_trades', 'columns'),
        Output('g1', 'figure'),
        Output('g2', 'figure')],
-      [Input('interval-component', 'n_intervals')])
-  def update_tables_graphs(n_intervals):
-    print('updating!!!!')
+      [Input('interval-component', 'n_intervals'),
+       Input('exchange_options', 'value')])
+  def update_tables_graphs(_, value):
+    print('Receive new data and updating')
+
     db_path = os.path.join(os.getcwd(), 'flaskblog/tradings/test.db')
-    exchange_name = 'bitbay'
+    exchange_name = value
     conn = sqlite3.connect(
         db_path, check_same_thread=False)
     df1 = pd.read_sql_query(
