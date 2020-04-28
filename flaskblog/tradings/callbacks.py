@@ -260,7 +260,7 @@ def register_callbacks(dashapp):
   def update_tables_graphs(_, value):
     print('Receive new data and updating')
 
-    db_path = os.path.join(os.getcwd(), 'flaskblog/tradings/test.db')
+    db_path = os.path.join(os.getcwd(), 'flaskblog/tradings/test1.db')
     exchange_name = value
     conn = sqlite3.connect(
         db_path, check_same_thread=False)
