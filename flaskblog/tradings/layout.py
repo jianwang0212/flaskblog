@@ -97,7 +97,7 @@ layout = html.Div(
                     children=[dcc.Dropdown(
                         id='exchange_options',
                         options=[{'label': i, 'value': i} for i in exchanges],
-                        value='indodax'),
+                        value='bitbay'),
                         dcc.Graph(id='g1'),
                         dcc.Graph(id='g2')],
                 ),
