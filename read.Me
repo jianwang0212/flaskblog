@@ -59,15 +59,24 @@ rsync -avz -e root@173.230.137.72:/root/flaskblog/flaskblog/29_dec_site.db /User
 9. cd /home/yin/flaskblog && gunicorn -w 3 run:app
 
 ### Refresh server to match local ####
+1. easy fix:
 conda activate base
 sudo systemctl restart nginx
 cd /home/yin/flaskblog && export FLASK_APP=run.py
-flask run --host=0.0.0.0
 sudo git pull
 sudo killall gunicorn
-# gunicorn --bind 0.0.0.0:5000 run:app ## test on local port
-# gunicorn -w 3 run:app ## test on web
 nohup gunicorn -w 3 run:app
+
+2. if easy fix doesn't work, try one by one
+conda activate base
+sudo systemctl restart nginx
+cd /home/yin/flaskblog && export FLASK_APP=run.py
+sudo git pull
+flask run --host=0.0.0.0
+sudo killall gunicorn
+## test on local port: gunicorn --bind 0.0.0.0:5000 run:app
+## test on web: gunicorn -w 3 run:app
+## should have bunch of message output: nohup gunicorn -w 3 run:app
 
 ## not in use
 10. sudo apt install supervisor

@@ -43,11 +43,11 @@ layout = html.Div(
                             """
 
                             The first panel shows the comparison between the hitorical market orderbookv (red/blue
-                            thin line) and my orders (blur dash) and my executed trades (triangles) . """, html.Br(), html.Br(),
+                            thin line) and my orders (blur dash) and my executed trades (triangles). """, html.Br(), html.Br(),
                             """
 
                             The second panel shows my current position in ETH and Fiat for a specific exchange (left pie fig),
-                            and my latest open orders compare to the current 5 level market orderbook (right fig) . """, html.Br(), html.Br(),
+                            and my latest open orders compare to the current 5 level market orderbook (right fig). """, html.Br(), html.Br(),
                             """
 
                             The third panel shows my latest 5 trades and latest 5 open orders in a specific exchange.  """, html.Br(), html.Br(),
