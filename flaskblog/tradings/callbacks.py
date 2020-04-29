@@ -254,7 +254,8 @@ def register_callbacks(dashapp):
        Output('table_openorders', 'columns'),
        Output('table_trades', 'columns'),
        Output('g1', 'figure'),
-       Output('g2', 'figure')],
+       Output('g2', 'figure'),
+       Output("live_clock", "children")],
       [Input('interval-component', 'n_intervals'),
        Input('exchange_options', 'value')])
   def update_tables_graphs(_, value):
@@ -291,4 +292,7 @@ def register_callbacks(dashapp):
     fig1 = fig1_producer(df1, df2, df3)
     fig2 = fig2_producer(df1, df2, df3)
 
-    return tbl_my_orders.to_dict('records'), tbl_my_trades.to_dict('records'), columns_orders, columns_trades, fig1, fig2
+    # update live clock
+    new_time = dt.datetime.now().strftime("%H:%M:%S")
+
+    return tbl_my_orders.to_dict('records'), tbl_my_trades.to_dict('records'), columns_orders, columns_trades, fig1, fig2, new_time

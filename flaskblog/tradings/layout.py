@@ -69,23 +69,8 @@ layout = html.Div(
                             className="three-col",
                             children=dt.datetime.now().strftime("%H:%M:%S"),
                         ),
-                        # html.P(className="three-col", children="Ask"),
-                        # html.Div(
-                        #     id="pairs",
-                        #     className="div-bid-ask",
-                        #     children=[
-                        #         get_row(first_ask_bid(
-                        #             pair, datetime.datetime.now()))
-                        #         for pair in currencies
-                        #     ],
-                        # ),
                     ],
                 ),
-                # Div for News Headlines
-                # html.Div(
-                #     className="div-news",
-                #     children=[html.Div(id="news", children=update_news())],
-                # ),
             ],
         ),
         # Right Panel Div
