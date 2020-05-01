@@ -83,6 +83,48 @@ layout = html.Div(
                         id='exchange_options',
                         options=[{'label': i, 'value': i} for i in exchanges],
                         value='bitbay'),
+                        html.Div(
+                            [
+                                html.Div(
+                                    [html.H6(id="5h_pnl"),
+                                     html.P("5h pnl(amt/pct/mkt_pct/rlt_pct)")],
+                                    id="5hpnl",
+                                    className="mini_container",
+                                ),
+                                # html.Div(
+                                #     [html.H6(id="10h_pnl"),
+                                #      html.P("10h pnl(amt/pct/mkt_pct/rlt_pct)")],
+                                #     id="10hpnl",
+                                #     className="mini_container",
+                                # ),
+                                html.Div(
+                                    [html.H6(id="1d_pnl"),
+                                     html.P("1d pnl(amt/pct/mkt_pct/rlt_pct)")],
+                                    id="1dpnl",
+                                    className="mini_container",
+                                ),
+                                html.Div(
+                                    [html.H6(id="1w_pnl"),
+                                     html.P("1w pnl(amt/pct/mkt_pct/rlt_pct)")],
+                                    id="1wpnl",
+                                    className="mini_container",
+                                ),
+                                # html.Div(
+                                #     [html.H6(id="1m_pnl"),
+                                #      html.P("1m pnl(amt/pct/mkt_pct/rlt_pct)")],
+                                #     id="1mpnl",
+                                #     className="mini_container",
+                                # ),
+                                # html.Div(
+                                #     [html.H6(id="YTD_pnl"),
+                                #      html.P("YTD pnl(amt/pct/mkt_pct/rlt_pct)")],
+                                #     id="YTDpnl",
+                                #     className="mini_container",
+                                # ),
+
+                            ],
+                            className="row container-display",
+                    ),
                         dcc.Graph(id='g1'),
                         dcc.Graph(id='g2')],
                 ),

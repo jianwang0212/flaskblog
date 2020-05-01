@@ -246,6 +246,44 @@ def fig2_producer(df1, df2, df3):
   return fig2
 
 
+# to calculate the total bal container
+def nearest(items, pivot):
+  return min(items, key=lambda x: abs(x - pivot))
+
+
+def cal_bal_usd(x):
+  return (x['bal_fiat_total'] + x['bal_eth_total'] * x['1_bid_px']) / x['fx_x']
+
+
+def pnl_to_string(amt, pct, mkt_pct, rlt_pct):
+  amt = '$' + amt.round().to_string().split()[1] + '/'
+  pct = (100 * pct).round(2).to_string().split()[1] + '%/'
+  mkt_pct = (100 * mkt_pct).round(2).to_string().split()[1] + '%/'
+  rlt_pct = (100 * rlt_pct).round(2).to_string().split()[1] + '%'
+  s = amt + pct + mkt_pct + rlt_pct
+  return s
+
+
+def pnl(df, time):
+
+  now = df['time_x'].iloc[-1]
+  previous = now - dt.timedelta(hours=time)
+  index = nearest(df['time_x'], previous)
+  condition = df['time_x'] == index
+  x_data = df[condition]  # previous time data
+  y_data = df.iloc[-1]  # current time data
+  x_bal = cal_bal_usd(x_data)
+  y_bal = cal_bal_usd(y_data)
+  amt = y_bal - x_bal
+  pct = amt / x_bal
+  mkt_amt = (y_data['1_bid_px'] - x_data['1_bid_px'])
+  mkt_pct = mkt_amt / (x_data['1_bid_px'])  # market price change in percent
+  rlt_amt = amt - mkt_amt * 0.5
+  rlt_pct = pct - mkt_pct * 0.5
+  s = pnl_to_string(amt, pct, mkt_pct, rlt_pct)
+  return s
+
+
 def register_callbacks(dashapp):
 
   @dashapp.callback(
@@ -255,7 +293,10 @@ def register_callbacks(dashapp):
        Output('table_trades', 'columns'),
        Output('g1', 'figure'),
        Output('g2', 'figure'),
-       Output("live_clock", "children")],
+       Output("live_clock", "children"),
+       Output("5h_pnl", "children"),
+       Output("1d_pnl", "children"),
+       Output("1w_pnl", "children")],
       [Input('interval-component', 'n_intervals'),
        Input('exchange_options', 'value')])
   def update_tables_graphs(_, value):
@@ -273,6 +314,8 @@ def register_callbacks(dashapp):
         "SELECT * from {}_trades".format(exchange_name), conn)
     conn.close()
 
+    df1['time_x'] = df1['time_x'].apply(
+        lambda x: dt.datetime.strptime(x, "%y-%m-%d %H:%M:%S"))
     # tables
     ## tables - data
     tbl_my_trades = df3[['time', 'type', 'takerOrMaker', 'side', 'amount', 'price',
@@ -295,4 +338,10 @@ def register_callbacks(dashapp):
     # update live clock
     new_time = dt.datetime.now().strftime("%H:%M:%S")
 
-    return tbl_my_orders.to_dict('records'), tbl_my_trades.to_dict('records'), columns_orders, columns_trades, fig1, fig2, new_time
+    # update the profit container
+    # v1 = pnl(df1, 5)
+    v_5h_pnl = pnl(df1, 5)
+    v_1d_pnl = pnl(df1, 24)
+    v_1w_pnl = pnl(df1, 24 * 7)
+
+    return tbl_my_orders.to_dict('records'), tbl_my_trades.to_dict('records'), columns_orders, columns_trades, fig1, fig2, new_time, v_5h_pnl, v_1d_pnl, v_1w_pnl
