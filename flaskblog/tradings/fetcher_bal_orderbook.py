@@ -71,7 +71,10 @@ def get_open_order(ex, currency_f):
     apiInstance = settings.exchanges[ex]['init']
     open_orders = apiInstance.fetch_open_orders()
     df = pd.DataFrame(open_orders)
-    df.drop(['clientOrderId', 'info'], axis=1)
+    try:
+        df.drop(['clientOrderId', 'info'], axis=1)
+    except:
+        print('no open orders')
     return df
 
 
@@ -91,17 +94,26 @@ def fetcher(exchange, now):
 
     df_openOrder = get_open_order(ex, currency_f)
     num_rows = df_openOrder.shape[0] - 1
-    basics_repeated = basics.append([basics] * num_rows)
-    basics_repeated.reset_index(drop=True, inplace=True)
-    df_openOrder = pd.concat([basics_repeated, df_openOrder], axis=1)
-    select = ['time', 'utc', 'exchange', 'pair', 'fx', 'id', 'timestamp', 'lastTradeTimestamp',
-              'symbol', 'type', 'side', 'price', 'cost', 'average', 'amount',
-              'filled', 'remaining', 'status', 'fee', 'trades']
-    df_openOrder = df_openOrder[select]
-    name = ['time', 'utc', 'exchange', 'pair', 'fx', 'OpenOrder_id', 'OpenOrder_timestamp', 'OpenOrder_lastTradeTimestamp',
-            'OpenOrder_symbol', 'OpenOrder_type', 'OpenOrder_side', 'OpenOrder_price', 'OpenOrder_cost', 'OpenOrder_average', 'OpenOrder_amount',
-            'OpenOrder_filled', 'OpenOrder_remaining', 'OpenOrder_status', 'OpenOrder_fee', 'OpenOrder_trades']
-    df_openOrder.columns = name
+    try:
+        if num_rows != 0:
+            basics_repeated = basics.append([basics] * num_rows)
+            basics_repeated.reset_index(drop=True, inplace=True)
+            df_openOrder = pd.concat([basics_repeated, df_openOrder], axis=1)
+        else:
+            df_openOrder = pd.concat([basics, df_openOrder], axis=1)
+
+        select = ['time', 'utc', 'exchange', 'pair', 'fx', 'id', 'timestamp', 'lastTradeTimestamp',
+                  'symbol', 'type', 'side', 'price', 'cost', 'average', 'amount',
+                  'filled', 'remaining', 'status', 'fee', 'trades']
+        df_openOrder = df_openOrder[select]
+        name = ['time', 'utc', 'exchange', 'pair', 'fx', 'OpenOrder_id', 'OpenOrder_timestamp', 'OpenOrder_lastTradeTimestamp',
+                'OpenOrder_symbol', 'OpenOrder_type', 'OpenOrder_side', 'OpenOrder_price', 'OpenOrder_cost', 'OpenOrder_average', 'OpenOrder_amount',
+                'OpenOrder_filled', 'OpenOrder_remaining', 'OpenOrder_status', 'OpenOrder_fee', 'OpenOrder_trades']
+        df_openOrder.columns = name
+    except:
+
+        print('no open orders, need to check')
+
     return df, df_openOrder
 
 
