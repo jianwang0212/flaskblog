@@ -58,7 +58,12 @@ def parse_indodax(apiInstance, now_ts, currency_f, ex):
 
 
 def parse_normal(apiInstance, currency_f, ex):
-    trades = apiInstance.fetch_my_trades()
+    if (ex == 'coinbasepro_gbp') | (ex == 'coinbasepro_eur'):
+        curr = ex[-3:]
+        print(curr)
+        trades = apiInstance.fetch_my_trades('ETH/' + curr.upper())
+    else:
+        trades = apiInstance.fetch_my_trades()
     df = pd.DataFrame(trades)
 
     column_names = ["utc", "time", "trade_id", "order_id", "type",
@@ -83,7 +88,7 @@ def parse_normal(apiInstance, currency_f, ex):
 
 
 def fetcher_trades(exchange, now):
-    ex = exchange['name']
+    ex = exchange['name_trader']
     currency_c = 'eth'
     currency_f = exchange['currency']
     now_ts = now.timestamp()

@@ -79,8 +79,7 @@ def get_open_order(ex, currency_f):
 
 
 def fetcher(exchange, now):
-    ex = exchange['name_trader']
-    ex_name = exchange['name']
+    ex = exchange['name']
     currency_c = 'eth'
     currency_f = exchange['currency']
     now_ts = now.timestamp()
@@ -89,7 +88,7 @@ def fetcher(exchange, now):
 
     basics = get_basic(now, ex, currency_f)
     bl = get_bal(ex, currency_f)
-    ob = get_ob(ex_name, pair)
+    ob = get_ob(ex, pair)
 
     df = pd.concat([basics, bl, ob], axis=1)
 
@@ -134,5 +133,4 @@ for k, v in exchanges.items():
     exchange_name = k
     exchange = v
     df, df_openOrder = fetcher(exchange, now)
-    df_openOrder['OpenOrder_fee'] = 0 # this is a useless fee
     save_to_sql(exchange_name, df, df_openOrder)
