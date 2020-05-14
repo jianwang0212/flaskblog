@@ -7,11 +7,15 @@ venv/
 # config
 *config.py
 
+# jupyter
+*.ipynb
+
+
 # python
 *.pyc
 
-# database
-# *.db
+database
+*.db
 
 # Compiled Object files
 *.slo

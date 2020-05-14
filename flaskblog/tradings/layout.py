@@ -42,7 +42,7 @@ layout = html.Div(
                             minutes in different exchanges. """, html.Br(), html.Br(),
                             """
 
-                            The first panel shows the comparison between the hitorical market orderbookv (red/blue
+                            The first panel shows the comparison between the historical market orderbookv (red/blue
                             thin line) and my orders (blur dash) and my executed trades (triangles). """, html.Br(), html.Br(),
                             """
 
